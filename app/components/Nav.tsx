@@ -7,12 +7,9 @@
 
 import Link from "next/link";
 import styled from "styled-components";
+import { useSession, signOut } from "next-auth/react";
 
-type Role = "student" | "instructor";
 
-type NavProps={
-    role: Role;
-};
 
 const Navbar = styled.nav`
     width: 100%;
@@ -56,12 +53,12 @@ const LogoutButton = styled.button`
 `;
 
 
-export default function Nav({role}: NavProps) {
+export default function Nav() {
     const {data:session, status} = useSession();
     if (status === "loading"){
         return null;
     }
-    const role = session?.user?.role;
+    const role = (session?.user as { role?: string } | undefined)?.role;
 
 
     //links change on which role in logged in
