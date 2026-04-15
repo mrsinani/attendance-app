@@ -8,6 +8,11 @@
 import Nav from "../components/Nav";
 
 export default function InstructorPage() {
+    const session = await getServerSession(authOptions);
+    if (!session) {
+        redirect("/");
+    }
+
     return (
         <>
             <Nav role="instructor" />

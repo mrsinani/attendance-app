@@ -47,9 +47,23 @@ const StyledLink = styled(Link)`
 
  
 `;
+const LogoutButton = styled.button`
+    background: none;
+    border: none;
+    color: #333333;
+    font-weight: 500;
+    cursor: pointer;
+`;
 
 
 export default function Nav({role}: NavProps) {
+    const {data:session, status} = useSession();
+    if (status === "loading"){
+        return null;
+    }
+    const role = session?.user?.role;
+
+
     //links change on which role in logged in
     const links =
         role === "instructor" ?[
@@ -72,6 +86,11 @@ export default function Nav({role}: NavProps) {
                             {link.label}
                         </StyledLink>
                     ))}
+                    {session && (
+                        <LogoutButton onClick={() => signOut({callbackUrl: "/"})}>
+                            Log Out
+                        </LogoutButton>
+                    )}
                 </NavLinks>
             </NavContainer>
         </Navbar>
