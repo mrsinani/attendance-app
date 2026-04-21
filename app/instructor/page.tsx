@@ -6,6 +6,7 @@
 */
 
 import Nav from "../components/Nav";
+import InstructorDashboardClient from "../components/instructor/InstructorDashboardClient";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { redirect } from "next/navigation";
@@ -25,10 +26,7 @@ export default async function InstructorPage() {
     return (
         <>
             <Nav/>
-            <main style={{ padding: "2rem" }}>
-                <h1>Instructor Dashboard</h1>
-                <p>Welcome to the instructor view of the attendance app.</p>
-            </main>
+            <InstructorDashboardClient />
         </>
     );
 }
