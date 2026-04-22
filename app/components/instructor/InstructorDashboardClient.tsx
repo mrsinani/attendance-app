@@ -73,10 +73,10 @@ export default function InstructorDashboardClient() {
   return (
     <section className="mx-auto max-w-6xl space-y-6 px-4 py-8 sm:px-6">
       <header className="space-y-1">
-        <h1 className="text-2xl font-bold text-gray-900">
+        <h1 className="text-2xl font-bold text-gray-500">
           Instructor Dashboard
         </h1>
-        <p className="text-sm text-gray-600">
+        <p className="text-sm text-gray-700">
           Search students and update attendance records.
         </p>
       </header>
