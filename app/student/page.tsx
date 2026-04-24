@@ -14,31 +14,31 @@ import SkipWidget from "../components/student/SkipWidget";
 
 const Page = styled.main`
     padding: 2rem;
-    color: black;
+    color: #000000;
     font-family: Arial, sans-serif;
 `;
 
 const Title = styled.h1`
-    color: white;
+    color: #111827;
     font-size: 20px;
     font-weight: 600;
     margin-bottom: 0.25rem;
 `;
 
 const Subtitle = styled.p`
-    color: white;
+    color: #374151;
     margin-bottom: 2rem;
 `;
 
 const Layout = styled.div`
-    background: white;
+    background: #ffffff;
     display: flex;
     gap: 2rem;
 `;
 
 const Left = styled.div`
     flex: 2;
-    border: 1px solid white;
+    border: 1px solid #e5e7eb;
     padding: 1rem;
 `;
 
