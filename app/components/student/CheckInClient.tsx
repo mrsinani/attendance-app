@@ -2,13 +2,23 @@
 import { useEffect, useRef, useState } from 'react'
 import { Html5Qrcode } from 'html5-qrcode'
 
-export default function CheckInClient({ studentEmail }: { studentEmail: string }) {
+export default function CheckInClient() {
     const [status, setStatus] = useState<'idle' | 'scanning' | 'success' | 'error'>('idle')
     const [message, setMessage] = useState('')
     const scannerRef = useRef<Html5Qrcode | null>(null)
 
     useEffect(() => {
         return () => { scannerRef.current?.stop().catch(() => {}) }
+    }, [])
+
+    // Opened from QR link: /student/check-in?token=...
+    useEffect(() => {
+        const params = new URLSearchParams(window.location.search)
+        const t = params.get('token')
+        if (t) {
+            void submitCheckIn(t)
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
     async function startScanning() {
@@ -31,11 +41,14 @@ export default function CheckInClient({ studentEmail }: { studentEmail: string }
     }
 
     async function submitCheckIn(qrToken: string) {
+        setStatus('scanning')
+        setMessage('Checking in…')
         try {
             const res = await fetch('/api/attendance', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ qrToken, studentEmail })
+                credentials: 'same-origin',
+                body: JSON.stringify({ qrToken }),
             })
             const json = await res.json()
             if (json.ok) {
@@ -43,7 +56,7 @@ export default function CheckInClient({ studentEmail }: { studentEmail: string }
                 setMessage('You are checked in!')
             } else {
                 setStatus('error')
-                setMessage(json.error)
+                setMessage(json.error || 'Check-in failed')
             }
         } catch {
             setStatus('error')
@@ -59,6 +72,10 @@ export default function CheckInClient({ studentEmail }: { studentEmail: string }
                 <button onClick={startScanning} style={{ marginTop: '1.5rem', padding: '0.75rem 2rem' }}>
                     Scan QR Code
                 </button>
+            )}
+
+            {status === 'scanning' && message && (
+                <p style={{ color: '#4b5563', marginTop: '1.25rem' }}>{message}</p>
             )}
 
             <div id='qr-reader' style={{ marginTop: '1.5rem', width: '100%' }} />

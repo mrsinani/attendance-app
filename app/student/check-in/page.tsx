@@ -9,12 +9,12 @@ export default async function CheckInPage() {
     if (!session) redirect('/')
 
     const role = (session.user as { role?: string })?.role
-    if (role !== 'student') redirect('/instructor')
+    if (role !== 'student' && role !== 'admin') redirect('/instructor')
 
     return (
         <>
             <Nav />
-            <CheckInClient studentEmail={session.user?.email ?? ''} />
+            <CheckInClient />
         </>
     )
 }

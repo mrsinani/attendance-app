@@ -6,6 +6,8 @@ export type UserDoc = {
     email: string;
     role: "student" | "instructor" | "admin";
     classIds?: string[]; // classes this user is enrolled in (students) or teaches (instructors)
+    /** Google profile image URL, synced on sign-in */
+    image?: string;
     createdAt: Date;
 };
 

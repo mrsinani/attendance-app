@@ -64,17 +64,22 @@ export default function Nav() {
     const role = (session?.user as { role?: string } | undefined)?.role;
 
 
-    //links change on which role in logged in
+    //links change based on role; admin gets access to both sides
+    const instructorLinks = [
+        {label: "Dashboard", href: "/instructor"},
+        {label: "QR Attendance", href: "/instructor/attendance"},
+    ];
+    const studentLinks = [
+        {label: "Dashboard", href: "/student"},
+        {label: "Check In", href: "/student/check-in"},
+        {label: "Attendance History", href: "/student/history"},
+    ];
     const links =
-        role === "instructor" ?[
-            {label: "Dashboard", href: "/instructor"},
-            {label: "Search Students", href:"/instructor/search"},
-            {label: "QR Attendance",href:"/instructor/attendance"},
-        ]:[
-            {label: "Dashboard", href: "/student"},
-            {label: "Check In", href:"/student/check-in"},
-            {label: "Attendance History", href:"/student/history"},
-        ];
+        role === "admin"
+            ? [...instructorLinks, ...studentLinks]
+            : role === "instructor"
+                ? instructorLinks
+                : studentLinks;
     return (
         <Navbar>
             <NavContainer>

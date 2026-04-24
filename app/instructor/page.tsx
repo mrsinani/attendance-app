@@ -19,7 +19,7 @@ export default async function InstructorPage() {
     }
     const role = (session.user as {role?: string}| undefined)?.role;
 
-    if (role !== "instructor") {
+    if (role !== "instructor" && role !== "admin") {
         redirect("/student");
     }
 

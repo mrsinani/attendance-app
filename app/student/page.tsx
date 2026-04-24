@@ -116,7 +116,7 @@ export default async function StudentPage() {
     }
     const role = (session.user as {role?: string}| undefined)?.role;
 
-    if (role !== "student") {
+    if (role !== "student" && role !== "admin") {
         redirect("/instructor");
     }
     const records = await getAttendance();

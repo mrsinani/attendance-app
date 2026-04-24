@@ -13,9 +13,8 @@ export default async function InstructorAttendancePage() {
     const session = await getServerSession(authOptions)
     if (!session) redirect('/')
 
-    // temporarily comment this out for testing
-    // const role = (session.user as { role?: string })?.role
-    // if (role !== 'instructor') redirect('/student')
+    const role = (session.user as { role?: string })?.role
+    if (role !== 'instructor' && role !== 'admin') redirect('/student')
 
     return (
         <>

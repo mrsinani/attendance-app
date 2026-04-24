@@ -14,14 +14,37 @@ export const authOptions: AuthOptions = {
   callbacks: {
     async signIn({ user }) {
       const users = await getCollection(USERS_COLLECTION);
+      const adminEmails = (process.env.ADMIN_EMAILS ?? "")
+        .split(",")
+        .map((e) => e.trim())
+        .filter(Boolean);
+      const defaultRole = adminEmails.includes(user.email ?? "")
+        ? "admin"
+        : "student";
+      const image =
+        typeof user.image === "string" && user.image.length > 0
+          ? user.image
+          : undefined;
+
       const existing = await users.findOne({ email: user.email });
       if (!existing) {
         await users.insertOne({
           name: user.name,
           email: user.email,
-          role: "student",
+          role: defaultRole,
+          image,
           createdAt: new Date(),
         });
+      } else {
+        await users.updateOne(
+          { email: user.email },
+          {
+            $set: {
+              name: user.name,
+              image,
+            },
+          },
+        );
       }
       return true;
     },

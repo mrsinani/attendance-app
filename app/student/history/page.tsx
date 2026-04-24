@@ -24,7 +24,8 @@ const Header = styled.h1`
 `;
 
 const P = styled.p`
-    color: white;
+    color: #374151;
+    margin: 4px 0;
 `;
 
 const BackButton = styled.button`

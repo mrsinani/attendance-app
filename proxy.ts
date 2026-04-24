@@ -10,6 +10,9 @@ export default withAuth({
     callbacks: {
         authorized: ({ token }) => !!token,
     },
+    pages: {
+        signIn: "/",
+    },
 });
 
 export const config = {
