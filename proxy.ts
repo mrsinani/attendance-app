@@ -5,10 +5,22 @@
   users cannot access them directly.
 */
 import { withAuth } from "next-auth/middleware";
+import type { NextRequest } from "next/server";
+
+function isCheckInPath(req: NextRequest) {
+    const p = req.nextUrl.pathname;
+    return p === "/student/check-in" || p.startsWith("/student/check-in/");
+}
 
 export default withAuth({
     callbacks: {
-        authorized: ({ token }) => !!token,
+        /** Allow /student/check-in without a session; page prompts for Google, then check-in runs. */
+        authorized: ({ token, req }) => {
+            if (isCheckInPath(req as NextRequest)) {
+                return true;
+            }
+            return !!token;
+        },
     },
     pages: {
         signIn: "/",
