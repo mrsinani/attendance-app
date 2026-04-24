@@ -9,6 +9,9 @@ if (!MONGO_URI) {
 const DB_NAME = "attendance-app";
 
 export const USERS_COLLECTION = "users";
+export const CLASSES_COLLECTION = "classes";
+export const SESSIONS_COLLECTION = "sessions";
+export const ATTENDANCE_COLLECTION = "attendance";
 
 let client: MongoClient | null = null;
 let db: Db | null = null;
@@ -21,7 +24,9 @@ async function connect(): Promise<Db> {
   return client.db(DB_NAME);
 }
 
-export default async function getCollection(collectionName: string): Promise<Collection> {
+export default async function getCollection(
+  collectionName: string,
+): Promise<Collection> {
   if (!db) {
     db = await connect();
   }

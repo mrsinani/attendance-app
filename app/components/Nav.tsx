@@ -13,15 +13,15 @@ import { useSession, signOut } from "next-auth/react";
 
 const Navbar = styled.nav`
     width: 100%;
-    background-color: #ededed;
-    border-bottom: 1px solid #dddddd;
+    background-color: #ffffff;
+    border-bottom: 1px solid #e5e7eb;
     padding: 1rem 2rem;
 `;
 
 const NavContainer = styled.div`
     margin: 0 auto;
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
     justify-content: space-between;
     align-items: center;
 `;
@@ -39,7 +39,7 @@ const NavLinks = styled.div`
 
 const StyledLink = styled(Link)`
   text-decoration: none;
-  color: #333333;
+  color: #374151;
   font-weight: 500;
 
  
@@ -47,7 +47,7 @@ const StyledLink = styled(Link)`
 const LogoutButton = styled.button`
     background: none;
     border: none;
-    color: #333333;
+    color: #374151;
     font-weight: 500;
     cursor: pointer;
 `;
@@ -55,7 +55,10 @@ const LogoutButton = styled.button`
 
 export default function Nav() {
     const {data:session, status} = useSession();
-    if (status === "loading"){
+    if (status === "loading") {
+        return null;
+    }
+    if (!session) {
         return null;
     }
     const role = (session?.user as { role?: string } | undefined)?.role;
