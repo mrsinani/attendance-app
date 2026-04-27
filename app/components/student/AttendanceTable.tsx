@@ -1,3 +1,7 @@
+/**
+ * Author: Jackson Pine
+ * Purpose: Provides the student attendance history as a table.
+ */
 "use client"
 import styled from "styled-components";
 

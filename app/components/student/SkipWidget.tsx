@@ -1,3 +1,7 @@
+/**
+ * Author: Jackson Pine
+ * Purpose: Gives the number of avalible absences as a widget
+ */
 "use client";
 import styled, { keyframes } from "styled-components";
 import { AttendanceRecord } from "../student/AttendanceTable";
