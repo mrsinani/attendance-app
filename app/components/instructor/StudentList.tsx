@@ -17,6 +17,7 @@ export default function StudentList({
   onEdit,
 }: StudentListProps) {
   const normalizedQuery = searchQuery.trim().toLowerCase();
+  // Filter by name/email using the normalized search input.
   const filteredStudents = students.filter((student) => {
     if (!normalizedQuery) {
       return true;
@@ -38,6 +39,7 @@ export default function StudentList({
 
   return (
     <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+      {/* Render the current filtered student set. */}
       {filteredStudents.map((student) => (
         <StudentCard key={student.id} student={student} onEdit={onEdit} />
       ))}

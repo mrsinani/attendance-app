@@ -50,6 +50,7 @@ const MOCK_STUDENTS: Student[] = [
 ];
 
 export default function InstructorDashboardClient() {
+  // Dashboard state: search, list, and edit modal.
   const [searchQuery, setSearchQuery] = useState("");
   const [students, setStudents] = useState<Student[]>(MOCK_STUDENTS);
   const [selectedStudent, setSelectedStudent] = useState<Student | null>(null);
@@ -66,6 +67,7 @@ export default function InstructorDashboardClient() {
   };
 
   const handleSaveAttendance = (updatedStudent: Student) => {
+    // Replace the edited student in local state.
     setStudents((previousStudents) =>
       previousStudents.map((student) =>
         student.id === updatedStudent.id ? updatedStudent : student,

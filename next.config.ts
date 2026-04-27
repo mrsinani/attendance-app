@@ -5,6 +5,7 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
+  // Project-level Next.js config.
   /* config options here */
 };
 

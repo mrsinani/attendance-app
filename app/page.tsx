@@ -37,6 +37,7 @@ function HomeContent() {
   const { data: session, status } = useSession();
   const searchParams = useSearchParams();
 
+  // Resolve callbackUrl and detect check-in sign-in flow.
   const { callbackUrl, isCheckInFlow } = useMemo(() => {
     const raw = searchParams.get("callbackUrl");
     if (!raw) {
@@ -66,6 +67,7 @@ function HomeContent() {
   }
 
   if (session) {
+    // Signed-in landing view.
     return (
       <div className="flex min-h-screen flex-col items-center justify-center gap-6 px-4 py-12">
         <h1 className="text-center text-2xl font-bold text-gray-500">
@@ -100,6 +102,7 @@ function HomeContent() {
       </h1>
 
       {isCheckInFlow ? (
+        // Check-in-specific sign-in path.
         <>
           <p className="max-w-md text-center text-base text-gray-700">
             You opened a check-in link. Sign in with Google to record your
@@ -114,6 +117,7 @@ function HomeContent() {
           </button>
         </>
       ) : (
+        // Default sign-in path.
         <>
           <p className="text-center text-base text-gray-700">Not signed in</p>
           <button

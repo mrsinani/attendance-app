@@ -20,6 +20,7 @@ export default function StudentCard({ student, onEdit }: StudentCardProps) {
 
       <button
         type="button"
+        // Open modal for this student.
         onClick={() => onEdit(student)}
         className="mt-4 rounded-md bg-blue-600 px-3 py-2 text-sm font-medium text-white transition hover:bg-blue-700"
       >

@@ -23,6 +23,7 @@ export default function EditAttendanceModal({
   const [attendanceInput, setAttendanceInput] = useState<string>("");
   const [error, setError] = useState<string | null>(null);
 
+  // Sync form field with selected student.
   useEffect(() => {
     if (student) {
       setAttendanceInput(String(student.attendance));
@@ -37,6 +38,7 @@ export default function EditAttendanceModal({
     return null;
   }
 
+  // Validate and normalize attendance before saving.
   const handleSave = () => {
     const trimmedInput = attendanceInput.trim();
 
@@ -81,6 +83,7 @@ export default function EditAttendanceModal({
             value={attendanceInput}
             onChange={(event) => {
               setAttendanceInput(event.target.value);
+              // Clear stale error while user edits.
               if (error) {
                 setError(null);
               }
