@@ -1,3 +1,7 @@
+//Nolan Mackie
+//U44215554
+//nmackie@bu.edu
+
 "use client";
 
 import Link from "next/link";

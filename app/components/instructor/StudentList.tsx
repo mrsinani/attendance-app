@@ -1,3 +1,7 @@
+//Nolan Mackie
+//U44215554
+//nmackie@bu.edu
+
 import StudentCard from "./StudentCard";
 import { type Student } from "./types";
 
