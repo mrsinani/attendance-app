@@ -8,6 +8,8 @@ export type UserDoc = {
     classIds?: string[]; // classes this user is enrolled in (students) or teaches (instructors)
     /** Google profile image URL, synced on sign-in */
     image?: string;
+    /** Per-class % override set by an instructor in the dashboard (0–100). */
+    attendanceOverrideByClass?: Record<string, number>;
     createdAt: Date;
 };
 
