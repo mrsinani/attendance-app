@@ -64,7 +64,7 @@ function HomeContent() {
   if (session) {
     return (
       <div className="flex min-h-screen flex-col items-center justify-center gap-6 px-4 py-12">
-        <h1 className="text-center text-2xl font-bold text-gray-900">
+        <h1 className="text-center text-2xl font-bold text-gray-500">
           Welcome to Attendance App
         </h1>
         {session.user?.image && (
