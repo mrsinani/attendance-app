@@ -2,6 +2,14 @@
 import { useState, useEffect } from 'react'
 import { QRCodeSVG } from 'qrcode.react'
 
+/*
+  File: AttendanceClient.tsx
+  Author: Jorge Lozano
+  Purpose:This is the interactive instructor UI, the actual component the
+  instructor sees and clicks around in.
+
+*/
+
 type ClassOption = { _id: string; name: string; code: string }
 
 export default function AttendanceClient({

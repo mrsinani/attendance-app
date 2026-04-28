@@ -4,6 +4,13 @@ import { redirect } from 'next/navigation'
 import Nav from '../../components/Nav'
 import AttendanceClient from '../../components/instructor/AttendanceClient'
 
+/*
+  File: attendance/page.tsx
+  Author: Jorge Lozano
+  Purpose:This is the instructor attendance page,
+  what loads when you visit /instructor/attendance.
+*/
+
 const MOCK_CLASSES = [
     { _id: 'class_001', name: 'Web Application Development', code: 'CS391' },
     { _id: 'class_002', name: 'Algorithms', code: 'CS301' },

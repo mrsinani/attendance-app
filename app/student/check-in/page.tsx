@@ -4,6 +4,14 @@ import { redirect } from 'next/navigation'
 import Nav from '../../components/Nav'
 import CheckInClient from '../../components/student/CheckInClient'
 
+/*
+  File: check-in/page.tsx
+  Author: Jorge Lozano
+  Purpose: Server-side page for the student check-in flow.
+  Handles auth and role check, then passes student email
+  to the client component for QR scanning.
+*/
+
 export default async function CheckInPage() {
     const session = await getServerSession(authOptions)
     if (!session) redirect('/')

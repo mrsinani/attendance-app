@@ -2,6 +2,14 @@
 import { useEffect, useRef, useState } from 'react'
 import { Html5Qrcode } from 'html5-qrcode'
 
+/*
+  File: CheckInClient.tsx
+  Author: Jorge Lozano
+  Purpose: Client-side component for the student check-in flow.
+  Activates the camera, scans the QR code, and submits
+  attendance to the API.
+*/
+
 export default function CheckInClient({ studentEmail }: { studentEmail: string }) {
     const [status, setStatus] = useState<'idle' | 'scanning' | 'success' | 'error'>('idle')
     const [message, setMessage] = useState('')
