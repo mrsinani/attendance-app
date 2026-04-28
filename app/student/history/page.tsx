@@ -1,173 +1,175 @@
 /**
  * Page: Attendance History
  * Author: Jackson Pine
- * Purpose: Provides the student attendance history as a table.
+ * Purpose: Student attendance history from Mongo (same user + optional classId).
  */
-"use client"
+"use client";
 
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import styled from "styled-components";
 import { useRouter } from "next/navigation";
+import { useSession } from "next-auth/react";
 import { AttendanceRecord } from "../../components/student/AttendanceTable";
 import AttendanceTable from "../../components/student/AttendanceTable";
+import Nav from "../../components/Nav";
 
 const Page = styled.div`
-    padding: 24px;
-    font-family: Arial, sans-serif;
-    color: black;
+  padding: 24px;
+  font-family: Arial, sans-serif;
+  color: black;
 `;
 
 const Header = styled.h1`
-    font-size: 20px;
-    font-weight: 600;
-    margin: 12px 0 20px 0;
+  font-size: 20px;
+  font-weight: 600;
+  margin: 12px 0 20px 0;
 `;
 
 const P = styled.p`
-    color: #374151;
-    margin: 4px 0;
+  color: #374151;
+  margin: 4px 0;
 `;
 
 const BackButton = styled.button`
-    background: white;
-    color: black;
-    border: 1px solid black;
-    padding: 6px 10px;
-    cursor: pointer;
-    font-size: 14px;
-    &:hover {
-        background: black;
-        color: white;
-    }
+  background: white;
+  color: black;
+  border: 1px solid black;
+  padding: 6px 10px;
+  cursor: pointer;
+  font-size: 14px;
+  &:hover {
+    background: black;
+    color: white;
+  }
+`;
+
+const ClassFilter = styled.label`
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  max-width: 360px;
+  margin-bottom: 16px;
+  font-size: 14px;
+  color: #374151;
+`;
+
+const Select = styled.select`
+  padding: 8px 10px;
+  border: 1px solid #d1d5db;
+  border-radius: 4px;
+  font-size: 14px;
 `;
 
 export default function AttendanceHistoryPage() {
-    const [records, setRecords] = useState<AttendanceRecord[]>([]);
-    const [loading, setLoading] = useState(true);
-    const router = useRouter();
+  const [records, setRecords] = useState<AttendanceRecord[]>([]);
+  const [classes, setClasses] = useState<
+    { classId: string; code: string; name: string }[]
+  >([]);
+  const [classFilter, setClassFilter] = useState<string>("");
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const router = useRouter();
+  const { status } = useSession();
 
-    useEffect(() => {
-        const dummyData: AttendanceRecord[] = [
-            {
-                _id: "1",
-                date: "2026-04-20",
-                sessionName: "Lecture 1",
-                status: "present",
-                notes: "on time",
-            },
-            {
-                _id: "2",
-                date: "2026-04-21",
-                sessionName: "Lecture 2",
-                status: "late",
-                notes: "5 minutes late. excused",
-            },
-            {
-                _id: "3",
-                date: "2026-04-22",
-                sessionName: "Lecture 3",
-                status: "absent",
-            },
-            {
-                _id: "4",
-                date: "2026-04-20",
-                sessionName: "Lecture 1",
-                status: "present",
-                notes: "on time",
-            },
-            {
-                _id: "5",
-                date: "2026-04-21",
-                sessionName: "Lecture 2",
-                status: "late",
-                notes: "5 minutes late. excused",
-            },
-            {
-                _id: "6",
-                date: "2026-04-22",
-                sessionName: "Lecture 3",
-                status: "present",
-            },
-            {
-                _id: "7",
-                date: "2026-04-20",
-                sessionName: "Lecture 1",
-                status: "present",
-                notes: "on time",
-            },
-            {
-                _id: "8",
-                date: "2026-04-21",
-                sessionName: "Lecture 2",
-                status: "late",
-                notes: "5 minutes late. excused",
-            },
-            {
-                _id: "9",
-                date: "2026-04-22",
-                sessionName: "Lecture 3",
-                status: "present",
-            },
-            {
-                _id: "10",
-                date: "2026-04-20",
-                sessionName: "Lecture 1",
-                status: "present",
-                notes: "on time",
-            },
-            {
-                _id: "11",
-                date: "2026-04-21",
-                sessionName: "Lecture 2",
-                status: "late",
-                notes: "5 minutes late. excused",
-            },
-            {
-                _id: "12",
-                date: "2026-04-22",
-                sessionName: "Lecture 3",
-                status: "absent",
-            },
-        ];
-        setRecords(dummyData);
-        setLoading(false);
-        // async function fetchData() {
-            
-        //     try {
-        //         const res = await fetch("/api/attendence/history");
-        //         const data = await res.json();
-        //         setRecords(data);
-        //     } catch (err) {
-        //         console.log(err);
-        //     } finally {
-        //         setLoading(false);
-        //     }
-        // }
-        // fetchData();
-    }, []);
+  const load = useCallback(async (classId: string) => {
+    setLoading(true);
+    setError(null);
+    const qs =
+      classId && classId.length > 0
+        ? `?classId=${encodeURIComponent(classId)}`
+        : "";
+    try {
+      const res = await fetch(`/api/attendance/history${qs}`, {
+        credentials: "same-origin",
+      });
+      const json = await res.json();
+      if (!res.ok || !json.ok) {
+        setError(json.error ?? "Could not load history");
+        setRecords([]);
+        setClasses([]);
+        return;
+      }
+      setRecords(json.data?.records ?? []);
+      setClasses(json.data?.classes ?? []);
+    } catch {
+      setError("Could not load history");
+      setRecords([]);
+    } finally {
+      setLoading(false);
+    }
+  }, []);
 
-    const attendanceCount = records.filter((r) => r.status === "present"
-        || (r.notes?.toLowerCase().includes("excused") ?? false)).length
-        
-    return (
-        <Page>
-            {loading ? (
-                <Page>loading... </Page>
-            ) : (
-            <>
-                <BackButton onClick={() => router.back()}>
-                ← Back
-                </BackButton>
-                <Header>Attendance History</Header>
-                {!loading && records.length === 0 && (
-                    <p>No Avalible Records</p>
-                )}
-                <P>You have attended {attendanceCount} / {records.length} or {((attendanceCount / records.length) * 100).toPrecision(3) }% of Lectures</P>
-                <P>Remaining Allowed Absences: {"?"}</P>
-                <AttendanceTable records={records}></AttendanceTable>
-            </>
+  useEffect(() => {
+    if (status === "unauthenticated") {
+      router.replace("/");
+      return;
+    }
+    if (status !== "authenticated") {
+      return;
+    }
+    void load(classFilter);
+  }, [status, classFilter, load, router]);
+
+  const attendanceCount = records.filter(
+    (r) =>
+      r.status === "present" ||
+      (r.notes?.toLowerCase().includes("excused") ?? false),
+  ).length;
+  const total = records.length;
+  const pct =
+    total > 0 ? ((attendanceCount / total) * 100).toFixed(1) : "0.0";
+
+  return (
+    <>
+      <Nav />
+      <Page>
+        {status === "loading" ? (
+          <P>Loading…</P>
+        ) : status === "unauthenticated" ? null : (
+          <>
+            <BackButton type="button" onClick={() => router.back()}>
+              ← Back
+            </BackButton>
+            <Header>Attendance History</Header>
+            {classes.length > 0 && (
+              <ClassFilter>
+                Filter by class
+                <Select
+                  value={classFilter}
+                  onChange={(e) => setClassFilter(e.target.value)}
+                >
+                  <option value="">All classes</option>
+                  {classes.map((c) => (
+                    <option key={c.classId} value={c.classId}>
+                      {c.code} — {c.name}
+                    </option>
+                  ))}
+                </Select>
+              </ClassFilter>
             )}
-        </Page>
-        
-    );
+            {error && <P style={{ color: "#b91c1c" }}>{error}</P>}
+            {loading ? (
+              <P>Loading records…</P>
+            ) : (
+              <>
+                {!error && records.length === 0 && (
+                  <P>No available records yet. Check in during an active class session to appear here.</P>
+                )}
+                {total > 0 && (
+                  <>
+                    <P>
+                      You have attended {attendanceCount} / {total} sessions (
+                      {pct}%)
+                    </P>
+                    <P>Remaining allowed absences: — (not set)</P>
+                  </>
+                )}
+                <AttendanceTable records={records} />
+              </>
+            )}
+          </>
+        )}
+      </Page>
+    </>
+  );
 }

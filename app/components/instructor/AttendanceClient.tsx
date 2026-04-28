@@ -1,5 +1,7 @@
 'use client'
 import { useState, useEffect, useCallback } from 'react'
+import { useSession } from 'next-auth/react'
+import Link from 'next/link'
 import { QRCodeSVG } from 'qrcode.react'
 
 type ClassOption = { _id: string; name: string; code: string }
@@ -13,13 +15,12 @@ type AttendeeRow = {
     scannedAt: string
 }
 
-export default function AttendanceClient({
-    classes,
-    instructorEmail,
-}: {
-    classes: ClassOption[]
-    instructorEmail: string
-}) {
+export default function AttendanceClient() {
+    const { data: authSession } = useSession()
+    const [classes, setClasses] = useState<ClassOption[]>([])
+    const [loadingClasses, setLoadingClasses] = useState(true)
+    const [classesError, setClassesError] = useState('')
+
     const [selectedClassId, setSelectedClassId] = useState('')
     const [qrToken, setQrToken] = useState('')
     const [expiresAt, setExpiresAt] = useState<Date | null>(null)
@@ -33,6 +34,33 @@ export default function AttendanceClient({
     useEffect(() => {
         setOrigin(window.location.origin)
     }, [])
+
+    const loadClasses = useCallback(async () => {
+        setLoadingClasses(true)
+        setClassesError('')
+        try {
+            const res = await fetch('/api/classes', { credentials: 'same-origin' })
+            const json = await res.json()
+            if (json.ok && json.data?.classes) {
+                const list: ClassOption[] = json.data.classes
+                setClasses(list)
+                setSelectedClassId((prev) => {
+                    if (prev && list.some((c) => c._id === prev)) return prev
+                    return list[0]?._id ?? ''
+                })
+            } else {
+                setClassesError(json.error ?? 'Could not load classes')
+            }
+        } catch {
+            setClassesError('Could not load classes')
+        } finally {
+            setLoadingClasses(false)
+        }
+    }, [])
+
+    useEffect(() => {
+        void loadClasses()
+    }, [loadClasses])
 
     const fetchAttendees = useCallback(async () => {
         if (!sessionId) return
@@ -128,9 +156,21 @@ export default function AttendanceClient({
             }}
         >
             <h1 style={{ fontSize: '1.5rem', fontWeight: 700 }}>Start Attendance Session</h1>
-            {instructorEmail && (
+            {authSession?.user?.email && (
                 <p style={{ fontSize: '0.875rem', color: '#6b7280', marginTop: '0.25rem' }}>
-                    Signed in as {instructorEmail}
+                    Signed in as {authSession.user.email}
+                </p>
+            )}
+
+            {loadingClasses && <p style={{ color: '#6b7280' }}>Loading classes…</p>}
+            {classesError && <p style={{ color: '#dc2626' }}>{classesError}</p>}
+            {!loadingClasses && classes.length === 0 && !classesError && (
+                <p style={{ marginTop: '1rem', lineHeight: 1.5 }}>
+                    No classes yet.{' '}
+                    <Link href="/instructor" style={{ color: '#2563eb' }}>
+                        Create one on the dashboard
+                    </Link>
+                    , then return here to start a session.
                 </p>
             )}
 
@@ -139,6 +179,7 @@ export default function AttendanceClient({
                 <select
                     value={selectedClassId}
                     onChange={(e) => setSelectedClassId(e.target.value)}
+                    disabled={classes.length === 0}
                     style={{
                         display: 'block',
                         marginTop: '0.5rem',
@@ -148,7 +189,7 @@ export default function AttendanceClient({
                         border: '1px solid #d1d5db',
                     }}
                 >
-                    <option value="">-- Pick a class --</option>
+                    {classes.length === 0 && <option value="">— No classes —</option>}
                     {classes.map((c) => (
                         <option key={c._id} value={c._id}>
                             {c.code} — {c.name}
