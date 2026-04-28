@@ -4,6 +4,14 @@ import { useSession } from 'next-auth/react'
 import Link from 'next/link'
 import { QRCodeSVG } from 'qrcode.react'
 
+/*
+  File: AttendanceClient.tsx
+  Author: Jorge Lozano
+  Purpose:This is the interactive instructor UI, the actual component the
+  instructor sees and clicks around in.
+
+*/
+
 type ClassOption = { _id: string; name: string; code: string }
 
 type AttendeeRow = {

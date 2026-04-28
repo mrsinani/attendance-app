@@ -4,6 +4,12 @@ import type { ActionResult, SessionDoc } from "@/lib/types";
 
 export const dynamic = "force-dynamic";
 
+/*
+  File: sessions/route.ts
+  Author: Jorge Lozano
+  Purpose: This file is the API endpoint that creates an attendance session.
+  When the instructor clicks "Start Session", the frontend calls this file.
+*/
 function generateToken() {
   return "tok_" + Math.random().toString(36).slice(2, 10);
 }
