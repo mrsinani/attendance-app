@@ -1,3 +1,5 @@
+// danaid sinani
+// Configures Google sign-in and role syncing for NextAuth.
 // this code is taken straight from next auth docs with some logic from mongodb
 
 import type { AuthOptions } from "next-auth";

@@ -1,3 +1,6 @@
+// Danaid Sinani
+// API for getting stats for a class
+
 import { NextResponse } from "next/server";
 import getCollection, {
   ATTENDANCE_COLLECTION,

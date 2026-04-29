@@ -1,3 +1,7 @@
+// Danaid Sinani
+// Client for checking in students with qr code
+
+
 'use client'
 import { useCallback, useEffect, useRef, useState, startTransition } from 'react'
 import { Html5Qrcode } from 'html5-qrcode'

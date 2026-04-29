@@ -1,3 +1,5 @@
+// danaid sinani
+// Sets up MongoDB connection and collection name helpers.
 import { Collection, Db, MongoClient } from "mongodb";
 
 const MONGO_URI = process.env.MONGODB_URI as string;

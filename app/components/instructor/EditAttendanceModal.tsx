@@ -1,4 +1,4 @@
-//Nolan Mackie
+//Nolan Mackie and Danaid
 //U44215554
 //nmackie@bu.edu
 

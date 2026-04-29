@@ -1,3 +1,5 @@
+// danaid sinani
+// Provides shared session checks for protected API routes.
 import { NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";

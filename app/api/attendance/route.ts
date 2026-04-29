@@ -1,3 +1,6 @@
+// Danaid Sinani
+// API for getting attendance for a class
+
 import { NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";

@@ -1,3 +1,6 @@
+// Danaid Sinani
+// API for setting attendance override for a student in a class
+
 import { NextResponse } from "next/server";
 import getCollection, { CLASSES_COLLECTION, USERS_COLLECTION } from "@/db";
 import { getInstructorOrAdminSession } from "@/lib/api-helpers";

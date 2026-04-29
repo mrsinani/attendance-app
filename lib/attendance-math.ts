@@ -1,3 +1,5 @@
+// danaid sinani
+// Calculates a student's attendance percentage for a class.
 import getCollection, {
   ATTENDANCE_COLLECTION,
   SESSIONS_COLLECTION,

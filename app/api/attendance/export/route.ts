@@ -1,3 +1,5 @@
+// danaid sinani
+// Exports class attendance records as a CSV file.
 import { NextResponse } from "next/server";
 import getCollection, {
   ATTENDANCE_COLLECTION,

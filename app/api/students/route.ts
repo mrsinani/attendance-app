@@ -1,3 +1,5 @@
+// Danaid Sinani
+// Handles class roster and student attendance summary queries.
 import { NextResponse } from "next/server";
 import getCollection, {
   ATTENDANCE_COLLECTION,

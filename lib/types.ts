@@ -1,3 +1,5 @@
+// Danaid Sinani
+// Types for database
 // Shape of a user document in the `users` collection.
 // Created on first sign-in in lib/auth.ts.
 export type UserDoc = {

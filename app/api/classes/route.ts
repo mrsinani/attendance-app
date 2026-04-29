@@ -1,3 +1,5 @@
+// danaid sinani
+// Creates and lists classes for instructors/admins.
 import { NextResponse } from "next/server";
 import getCollection, { CLASSES_COLLECTION } from "@/db";
 import { getInstructorOrAdminSession } from "@/lib/api-helpers";
